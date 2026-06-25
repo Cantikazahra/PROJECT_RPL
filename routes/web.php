@@ -33,13 +33,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pengajuan/detail/{id}', [UserController::class, 'detailPengajuan'])->name('user.pengajuan.detail');
 
-    Route::get('/status-pengajuan', [UserController::class, 'statusPengajuan'])->name('user.status');
+    Route::get('/status-pengajuan/{id}', [UserController::class, 'statusPengajuan'])->name('user.status');
     Route::get('/riwayat-permohonan', [UserController::class, 'riwayatPengajuan'])->name('user.riwayat');
     
     Route::get('/dokumen-saya', [UserController::class, 'dashboard'])->name('user.dokumen');
     Route::get('/notifikasi', [UserController::class, 'dashboard'])->name('user.notifikasi');
-    Route::get('/panduan', [UserController::class, 'dashboard'])->name('user.panduan');
+    Route::get('/panduan', [UserController::class, 'showPanduan'])->name('user.panduan');
     Route::get('/bantuan', [UserController::class, 'dashboard'])->name('user.bantuan');
 
+    Route::get('/profil', [UserController::class, 'showProfil'])->name('user.profil');
+    
     Route::get('/dokumen/lihat/{id}/{field}', [UserController::class, 'lihatDokumen'])->name('user.dokumen.lihat');
 });

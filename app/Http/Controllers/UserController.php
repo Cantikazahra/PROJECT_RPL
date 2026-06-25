@@ -110,6 +110,7 @@ class UserController extends Controller
         $dokumen = Dokumen::where('pengajuan_id', $id)->firstOrFail();
         $pengajuan = Pengajuan::findOrFail($id);
 
+        // Verifikasi kepemilikan
         if ($pengajuan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki hak akses.');
         }
@@ -133,11 +134,25 @@ class UserController extends Controller
     }
 
     // Status pengajuan terkini
-    public function statusPengajuan()
+    public function statusPengajuan($id = null)
     {
-        $userId = Auth::id();
-        $latest = Pengajuan::where('user_id', $userId)->latest()->first();
-        return view('user.status', compact('latest'));
+        // Jika $id tidak ada, ambil pengajuan terbaru
+        if ($id) {
+            $pengajuan = \App\Models\Pengajuan::findOrFail($id);
+        } else {
+            $pengajuan = \App\Models\Pengajuan::where('user_id', auth()->id())
+                        ->latest()
+                        ->first();
+        }
+
+        // Pastikan variabel 'pengajuan' dikirim dengan menggunakan compact('pengajuan')
+        return view('user.status', compact('pengajuan'));
+    }
+
+    public function showPanduan()
+    {
+        $faqs = \App\Models\Faq::all(); // Ambil data FAQ dari database
+        return view('user.panduan', compact('faqs'));
     }
 
     // Riwayat pengajuan
@@ -155,5 +170,12 @@ class UserController extends Controller
 
         $daftarPengajuan = $query->orderBy('created_at', 'desc')->paginate(5);
         return view('user.riwayat', compact('daftarPengajuan', 'judul'));
+    }
+
+    public function showProfil()
+    {
+        // Mengambil data user yang sedang login
+        $user = auth()->user();
+        return view('user.profil', compact('user'));
     }
 }
