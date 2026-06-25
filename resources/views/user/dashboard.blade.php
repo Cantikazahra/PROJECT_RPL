@@ -67,27 +67,26 @@
                 <i class="fas fa-chevron-right text-[10px] text-blue-600 mr-1"></i>
             </a>
 
-<div class="text-left mb-5">
+            <div class="text-left mb-5">
                 <h3 class="text-xs font-bold text-gray-800 mb-2">Status Pengajuan Terakhir</h3>
                 
                 @if(isset($latest) && $latest != null)
+                    @php
+                        $statusColor = match($latest->status) {
+                            'DISETUJUI' => 'text-green-600',
+                            'MENUNGGU' => 'text-yellow-600',
+                            'PERLU PERBAIKAN' => 'text-amber-500',
+                            default => 'text-red-600'
+                        };
+                    @endphp
                     <a href="{{ route('user.pengajuan.detail', $latest->id) }}" class="w-full border border-gray-300 rounded-2xl p-4 flex items-center space-x-4 bg-white shadow-xs hover:bg-gray-50 transition block group text-left">
-                        <div class="w-9 h-9 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-500 group-hover:bg-blue-100 transition">
+                        <div class="w-9 h-9 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-500">
                             <i class="far fa-file-text text-xs"></i>
                         </div>
-                        <!-- 🔥 KONDISI IF: Mengganti text-gray-500 menjadi text-gray-900 agar hitam tegas -->
                         <div class="flex-1 text-[11px] space-y-1 text-gray-900">
                             <div class="flex justify-between">
                                 <span class="font-semibold text-gray-900">Status</span>
-                                @if($latest->status == 'DISETUJUI')
-                                    <span class="font-bold text-green-600">{{ $latest->status }}</span>
-                                @elseif($latest->status == 'MENUNGGU')
-                                    <span class="font-bold text-blue-600">{{ $latest->status }}</span>
-                                @elseif($latest->status == 'PERLU PERBAIKAN')
-                                    <span class="font-bold text-amber-500">{{ $latest->status }}</span>
-                                @else
-                                    <span class="font-bold text-red-600">{{ $latest->status }}</span>
-                                @endif
+                                <span class="font-bold {{ $statusColor }} tracking-wide">{{ $latest->status }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-semibold text-gray-900">Tanggal</span>
@@ -95,41 +94,13 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="font-semibold text-gray-900">No. Pengajuan</span>
-                                <span class="font-mono font-semibold text-gray-800 flex items-center">
-                                    {{ $latest->no_pengajuan }}
-                                    <i class="fas fa-chevron-right text-[8px] text-gray-400 ml-1.5 group-hover:text-blue-600 transition"></i>
-                                </span>
+                                <span class="font-mono font-semibold text-gray-800">{{ $latest->no_pengajuan }}</span>
                             </div>
                         </div>
                     </a>
                 @else
-                    <!-- 🔥 KONDISI ELSE: Label juga dipastikan menggunakan text-gray-900 -->
-                    <div class="border border-gray-300 rounded-2xl p-4 bg-white shadow-3xs flex items-center space-x-4 text-left">
-                        <div class="w-9 h-9 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-500 shrink-0">
-                            <i class="far fa-file-alt text-xs"></i>
-                        </div>
-                        
-                        <div class="flex-1 text-[11px] space-y-1">
-                            <div class="flex justify-between items-center">
-                                <span class="font-semibold text-gray-900">Status</span>
-                                <span class="font-bold text-yellow-600 tracking-wide">{{ $pengajuanTerakhir->status ?? 'BELUM ADA' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="font-semibold text-gray-900">Tanggal</span>
-                                <span class="font-medium text-gray-800">{{ isset($pengajuanTerakhir) ? \Carbon\Carbon::parse($pengajuanTerakhir->tanggal_pengajuan)->format('d-m-Y') : '-' }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="font-semibold text-gray-900">No. Pengajuan</span>
-                                @if(isset($pengajuanTerakhir))
-                                    <a href="{{ route('user.pengajuan.detail', $pengajuanTerakhir->id) }}" class="font-mono font-semibold text-gray-800 flex items-center hover:text-blue-600 transition">
-                                        {{ $pengajuanTerakhir->no_pengajuan }}
-                                        <i class="fas fa-chevron-right text-[9px] text-gray-400 ml-1"></i>
-                                    </a>
-                                @else
-                                    <span class="font-medium text-gray-400">-</span>
-                                @endif
-                            </div>
-                        </div>
+                    <div class="border border-gray-300 rounded-2xl p-4 bg-white text-[11px] text-gray-400 text-center">
+                        Belum ada pengajuan izin.
                     </div>
                 @endif
             </div>

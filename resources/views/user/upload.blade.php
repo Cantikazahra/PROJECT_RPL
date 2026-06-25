@@ -10,110 +10,116 @@
     <style>
         body { font-family: 'Poppins', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-900 flex justify-center items-center min-h-screen p-2 overflow-hidden">
+<body class="bg-gray-900 flex justify-center items-center min-h-screen p-2">
 
-    <div class="w-[340px] h-[680px] bg-white rounded-[36px] shadow-2xl overflow-y-auto relative p-5 pt-10 flex flex-col justify-between no-scrollbar">
+    <div class="w-[340px] h-[680px] bg-white rounded-[36px] shadow-2xl overflow-hidden p-5 pt-10 flex flex-col">
         
-        <div class="w-full flex-grow flex flex-col">
-            <div class="flex justify-between items-center mb-5">
-                <a href="{{ route('user.pengajuan.detail', $pengajuan_id) }}" class="w-7 h-7 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition focus:outline-none">
-                    <i class="fas fa-chevron-left text-xs"></i>
-                </a>
-                <h2 class="text-sm font-bold text-gray-800 tracking-wide">Upload Dokumen</h2>
-                <div class="w-7"></div>
-            </div>
-
-            <div class="text-left mb-4 px-1">
-                <h3 class="text-xs font-bold text-gray-800 mb-0.5">Upload Dokumen Persyaratan</h3>
-                <p class="text-[9px] text-gray-400">Upload semua dokumen yang diperlukan</p>
-            </div>
-
-<form action="{{ route('user.upload.process', $pengajuan_id) }}" method="POST" enctype="multipart/form-data" class="space-y-4 flex-grow text-left overflow-y-auto no-scrollbar max-h-[440px] pr-0.5">
-                @csrf
-
-                <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs">
-                    <label class="block text-[11px] font-bold text-gray-800">KTP Pemohon</label>
-                    <span class="block text-[9px] text-gray-400 mb-2">Upload KTP Anda</span>
-                    <div class="border border-dashed border-gray-300 rounded-xl p-4 text-center bg-gray-50 relative cursor-pointer hover:bg-gray-100 transition">
-                        <input type="file" id="input_ktp" name="file_ktp" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                        <i class="fas fa-cloud-upload-alt text-blue-500 text-lg mb-1"></i>
-                        <p id="text_ktp" class="text-[9px] text-gray-500 font-medium">Klik untuk upload</p>
-                    </div>
-                </div>
-
-                <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs">
-                    <label class="block text-[11px] font-bold text-gray-800">Bukti Kepemilikan Tanah</label>
-                    <span class="block text-[9px] text-gray-400 mb-2">Sertipikat / Kekancingan / Letter C</span>
-                    <div class="border border-dashed border-gray-300 rounded-xl p-4 text-center bg-gray-50 relative cursor-pointer hover:bg-gray-100 transition">
-                        <input type="file" id="input_sertifikat" name="file_sertifikat" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                        <i class="fas fa-cloud-upload-alt text-blue-500 text-lg mb-1"></i>
-                        <p id="text_sertifikat" class="text-[9px] text-gray-500 font-medium">Klik untuk upload</p>
-                    </div>
-                </div>
-
-                <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs">
-                    <label class="block text-[11px] font-bold text-gray-800">Fotokopi SPT PBB</label>
-                    <span class="block text-[9px] text-gray-400 mb-2">Pajak bumi dan bangunan tahun berjalan</span>
-                    <div class="border border-dashed border-gray-300 rounded-xl p-4 text-center bg-gray-50 relative cursor-pointer hover:bg-gray-100 transition">
-                        <input type="file" id="input_spt_pbb" name="file_spt_pbb" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                        <i class="fas fa-cloud-upload-alt text-blue-500 text-lg mb-1"></i>
-                        <p id="text_spt_pbb" class="text-[9px] text-gray-500 font-medium">Klik untuk upload</p>
-                    </div>
-                </div>
-
-                <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs">
-                    <div class="flex justify-between items-start mb-1">
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-800">Surat Pernyataan (3-in-1 & Pendirian)</label>
-                            <span class="block text-[8.5px] text-gray-400">Unduh template, isi, lalu upload di bawah</span>
-                        </div>
-                        <a href="{{ asset('templates/format_surat_dispensasi_imb.docx') }}" download class="px-2 py-1 bg-blue-600 text-white font-bold rounded-lg text-[8px] hover:bg-blue-700 transition flex items-center space-x-1 focus:outline-none shrink-0">
-                            <i class="fas fa-download text-[7px]"></i>
-                            <span>UNDUH (.DOCX)</span>
-                        </a>
-                    </div>
-                    <div class="border border-dashed border-gray-300 rounded-xl p-4 text-center bg-gray-50 relative cursor-pointer hover:bg-gray-100 transition mt-2">
-                        <input type="file" id="input_pernyataan" name="file_pernyataan_3in1" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                        <i class="fas fa-cloud-upload-alt text-blue-500 text-lg mb-1"></i>
-                        <p id="text_pernyataan" class="text-[9px] text-gray-500 font-medium">Klik untuk upload surat bertanda tangan</p>
-                    </div>
-                </div>
-
-                <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs">
-                    <label class="block text-[11px] font-bold text-gray-800">Gambar Teknis & Foto 3R</label>
-                    <span class="block text-[9px] text-gray-400 mb-2">Denah, lokasi, dan foto tampak depan</span>
-                    <div class="border border-dashed border-gray-300 rounded-xl p-4 text-center bg-gray-50 relative cursor-pointer hover:bg-gray-100 transition">
-                        <input type="file" id="input_gambar" name="file_gambar_bangunan" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                        <i class="fas fa-cloud-upload-alt text-blue-500 text-lg mb-1"></i>
-                        <p id="text_gambar" class="text-[9px] text-gray-500 font-medium">Klik untuk upload</p>
-                    </div>
-                </div>
-
-                <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs">
-                    <label class="block text-[11px] font-bold text-gray-500">Berkas Khusus / Pendukung (Opsional)</label>
-                    <span class="block text-[9px] text-gray-400 mb-2">KK Miskin / Surat Sewa / Perhitungan Struktur</span>
-                    <div class="border border-dashed border-gray-300 rounded-xl p-4 text-center bg-gray-50 relative cursor-pointer hover:bg-gray-100 transition">
-                        <input type="file" id="input_opsional" name="file_pendukung_opsional" class="absolute inset-0 opacity-0 cursor-pointer">
-                        <i class="fas fa-cloud-upload-alt text-gray-400 text-lg mb-1"></i>
-                        <p id="text_opsional" class="text-[9px] text-gray-400 font-medium">Klik untuk upload (Jika ada)</p>
-                    </div>
-                </div>
-
-                <div class="space-y-2 pt-2 sticky bottom-0 bg-white z-10">
-                    <button type="submit" class="w-full py-3 bg-[#2A65EA] text-white font-bold rounded-xl text-xs hover:bg-blue-700 transition tracking-wide shadow-md">
-                        SIMPAN DOKUMEN
-                    </button>
-                    <a href="{{ route('user.dashboard') }}" class="block w-full text-center py-2.5 border border-gray-300 text-gray-500 font-semibold rounded-xl text-[10px] hover:bg-gray-50 transition tracking-wide">
-                        UNGGAH BERKAS NANTI
-                    </a>
-                </div>
-            </form>
+        <div class="flex justify-between items-center mb-6">
+            <a href="{{ route('user.pengajuan.detail', $pengajuan_id) }}" class="w-8 h-8 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition">
+                <i class="fas fa-chevron-left text-[10px]"></i>
+            </a>
+            <h2 class="text-sm font-bold text-gray-800">Upload Dokumen</h2>
+            <div class="w-8"></div>
         </div>
 
+        <form id="uploadForm" action="{{ route('user.upload.process', $pengajuan_id) }}" method="POST" enctype="multipart/form-data" class="flex-grow overflow-y-auto no-scrollbar space-y-4 pb-4 pr-1">
+            @csrf
+
+            {{-- Pesan Error --}}
+            @if ($errors->any())
+                <div class="bg-red-50 p-2 rounded-xl">
+                    @foreach ($errors->all() as $error)
+                        <p class="text-[9px] text-red-600 font-bold">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Pesan Sukses --}}
+            @if(session('success'))
+                <div class="bg-green-50 p-2 rounded-xl text-[9px] text-green-700 font-bold">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @php
+                $dokumen = [
+                    ['id' => 'ktp', 'name' => 'file_ktp', 'label' => 'KTP Pemohon', 'desc' => 'Upload KTP asli'],
+                    ['id' => 'tanah', 'name' => 'file_sertifikat', 'label' => 'Bukti Kepemilikan Tanah', 'desc' => 'Sertifikat / Letter C'],
+                    ['id' => 'pbb', 'name' => 'file_spt_pbb', 'label' => 'Fotokopi SPT PBB', 'desc' => 'Pajak tahun berjalan'],
+                    ['id' => 'surat', 'name' => 'file_pernyataan_3in1', 'label' => 'Surat Pernyataan', 'desc' => 'Template 3-in-1', 'is_template' => true],
+                    ['id' => 'teknis', 'name' => 'file_gambar_bangunan', 'label' => 'Gambar & Foto Bangunan', 'desc' => 'Sketsa denah & foto tampak depan'],
+                    ['id' => 'opsional', 'name' => 'file_pendukung_opsional', 'label' => 'Berkas Pendukung', 'desc' => 'Surat Sewa, KK Miskin, dll (Opsional)', 'is_optional' => true]
+                ];
+            @endphp
+
+            @foreach($dokumen as $doc)
+            <div class="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm {{ isset($doc['is_optional']) ? 'border-dashed' : '' }}">
+                @if(isset($doc['is_template']))
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-800">{{ $doc['label'] }}</label>
+                            <p class="text-[9px] text-gray-400">{{ $doc['desc'] }}</p>
+                        </div>
+                        <a href="{{ asset('templates/format_surat_dispensasi_imb.docx') }}" download class="px-3 py-1 bg-blue-600 text-white font-bold rounded-lg text-[8px] hover:bg-blue-700 transition">
+                            <i class="fas fa-download mr-1"></i> UNDUH
+                        </a>
+                    </div>
+                @else
+                    <label class="block text-[11px] font-bold text-gray-800 mb-0.5">{{ $doc['label'] }}</label>
+                    <p class="text-[9px] text-gray-400 mb-3">{{ $doc['desc'] }}</p>
+                @endif
+
+                <div class="relative group">
+                    {{-- 'required' telah dihapus agar bisa dicicil --}}
+                    <input type="file" name="{{ $doc['name'] }}" id="input_{{ $doc['id'] }}" class="hidden" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" onchange="handleFile(this, 'label_{{ $doc['id'] }}', 'btn_{{ $doc['id'] }}')">
+                    
+                    <label for="input_{{ $doc['id'] }}" class="flex items-center justify-center p-3 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition">
+                        <i class="fas {{ $doc['id'] == 'teknis' ? 'fa-camera' : 'fa-cloud-upload-alt' }} text-blue-500 mr-2 text-sm"></i>
+                        <span id="label_{{ $doc['id'] }}" class="text-[10px] text-gray-500 font-medium truncate">Klik untuk upload</span>
+                    </label>
+
+                    <button type="button" id="btn_{{ $doc['id'] }}" onclick="removeFile('input_{{ $doc['id'] }}', 'label_{{ $doc['id'] }}', 'btn_{{ $doc['id'] }}')" 
+                            class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hidden shadow-md">
+                        <i class="fas fa-times text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+            @endforeach
+
+            <button type="submit" id="submitBtn" class="w-full py-4 bg-[#2A65EA] text-white font-bold rounded-xl text-xs hover:bg-blue-700 transition shadow-lg mt-2">
+                SIMPAN DOKUMEN
+            </button>
+        </form>
     </div>
 
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> MENYIMPAN...';
+        });
+
+        function handleFile(input, labelId, btnId) {
+            const label = document.getElementById(labelId);
+            const btn = document.getElementById(btnId);
+            if (input.files.length > 0) {
+                label.innerText = input.files[0].name;
+                label.classList.add('text-blue-700', 'font-bold');
+                btn.classList.remove('hidden');
+            }
+        }
+
+        function removeFile(inputId, labelId, btnId) {
+            const input = document.getElementById(inputId);
+            const label = document.getElementById(labelId);
+            const btn = document.getElementById(btnId);
+            input.value = ""; 
+            label.innerText = "Klik untuk upload";
+            label.classList.remove('text-blue-700', 'font-bold');
+            btn.classList.add('hidden');
+        }
+    </script>
 </body>
 </html>

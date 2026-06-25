@@ -50,8 +50,8 @@
                         <td class="font-semibold text-gray-800 align-top">{{ $pengajuan->luas_tanah }} m²</td>
                     </tr>
                     <tr>
-                        <td class="font-medium text-gray-500 align-top">Tahun Rencana Bangun</td>
-                        <td class="font-semibold text-gray-800 align-top">{{ $pengajuan->tahun_rencana_bangun }}</td>
+                        <td class="font-medium text-gray-500 align-top">Tahun Pembangunan</td>
+                        <td class="font-semibold text-gray-800 align-top">{{ $pengajuan->tahun_pembangunan }}</td>
                     </tr>
                     <tr>
                         <td class="font-medium text-gray-500 align-top">Jenis Bangunan</td>
@@ -80,34 +80,45 @@
                 <h3 class="text-xs font-bold text-gray-800 mb-2 tracking-wide">Dokumen Persyaratan</h3>
                 
                 <div class="space-y-2 overflow-y-auto no-scrollbar max-h-[190px] pr-0.5">
+                    
+                    {{-- Helper function untuk membuat link aman --}}
+                    @php
+                        function renderLink($pengajuan, $field) {
+                            if ($pengajuan->dokumen && $pengajuan->dokumen->$field) {
+                                return '<a href="'.route('user.dokumen.lihat', [$pengajuan->id, $field]).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>';
+                            }
+                            return '<span class="text-[8px] text-gray-400 italic">Belum ada</span>';
+                        }
+                    @endphp
+
                     <div class="flex justify-between items-center text-[10px] border-b border-gray-50 pb-1.5">
                         <span class="font-semibold text-gray-700 truncate max-w-[160px]"><i class="far fa-file-alt text-gray-400 mr-1.5"></i>KTP Pemohon</span>
-                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_ktp ? '<a href="'.asset('storage/'.$pengajuan->dokumen->file_ktp).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">Belum ada</span>' !!}
+                        {!! renderLink($pengajuan, 'file_ktp') !!}
                     </div>
 
                     <div class="flex justify-between items-center text-[10px] border-b border-gray-50 pb-1.5">
                         <span class="font-semibold text-gray-700 truncate max-w-[160px]"><i class="far fa-file-alt text-gray-400 mr-1.5"></i>Bukti Kepemilikan Tanah</span>
-                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_sertifikat ? '<a href="'.asset('storage/'.$pengajuan->dokumen->file_sertifikat).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">Belum ada</span>' !!}
+                        {!! renderLink($pengajuan, 'file_sertifikat') !!}
                     </div>
 
                     <div class="flex justify-between items-center text-[10px] border-b border-gray-50 pb-1.5">
                         <span class="font-semibold text-gray-700 truncate max-w-[160px]"><i class="far fa-file-alt text-gray-400 mr-1.5"></i>Fotokopi SPT PBB</span>
-                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_spt_pbb ? '<a href="'.asset('storage/'.$pengajuan->dokumen->file_spt_pbb).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">Belum ada</span>' !!}
+                        {!! renderLink($pengajuan, 'file_spt_pbb') !!}
                     </div>
 
                     <div class="flex justify-between items-center text-[10px] border-b border-gray-50 pb-1.5">
                         <span class="font-semibold text-gray-700 truncate max-w-[160px]"><i class="far fa-file-alt text-gray-400 mr-1.5"></i>Surat Pernyataan (3-in-1)</span>
-                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_pernyataan_3in1 ? '<a href="'.asset('storage/'.$pengajuan->dokumen->file_pernyataan_3in1).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">Belum ada</span>' !!}
+                        {!! renderLink($pengajuan, 'file_pernyataan_3in1') !!}
                     </div>
 
                     <div class="flex justify-between items-center text-[10px] border-b border-gray-50 pb-1.5">
                         <span class="font-semibold text-gray-700 truncate max-w-[160px]"><i class="far fa-image text-gray-400 mr-1.5"></i>Gambar Denah & Foto 3R</span>
-                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_gambar_bangunan ? '<a href="'.asset('storage/'.$pengajuan->dokumen->file_gambar_bangunan).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">Belum ada</span>' !!}
+                        {!! renderLink($pengajuan, 'file_gambar_bangunan') !!}
                     </div>
 
                     <div class="flex justify-between items-center text-[10px]">
                         <span class="font-semibold text-gray-500 truncate max-w-[160px]"><i class="fas fa-paperclip text-gray-400 mr-1.5"></i>Berkas Khusus (Opsional)</span>
-                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_pendukung_opsional ? '<a href="'.asset('storage/'.$pengajuan->dokumen->file_pendukung_opsional).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">-</span>' !!}
+                        {!! $pengajuan->dokumen && $pengajuan->dokumen->file_pendukung_opsional ? '<a href="'.route('user.dokumen.lihat', [$pengajuan->id, 'file_pendukung_opsional']).'" target="_blank" class="px-2 py-0.5 bg-gray-100 border border-gray-300 text-gray-700 font-bold rounded hover:bg-gray-200 transition text-[8px]">LIHAT</a>' : '<span class="text-[8px] text-gray-400 italic">-</span>' !!}
                     </div>
                 </div>
             </div>
