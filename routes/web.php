@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -44,4 +45,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profil', [UserController::class, 'showProfil'])->name('user.profil');
     
     Route::get('/dokumen/lihat/{id}/{field}', [UserController::class, 'lihatDokumen'])->name('user.dokumen.lihat');
+
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/pengajuan', [AdminController::class, 'daftarPengajuan'])->name('admin.pengajuan');
+    Route::get('/detail/{id}', [AdminController::class, 'detail'])->name('admin.detail');
+    Route::post('/update-status/{id}', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
 });
