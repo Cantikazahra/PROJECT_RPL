@@ -104,14 +104,15 @@ class UserController extends Controller
         }
     }
 
-    // Fungsi untuk menampilkan dokumen (diperbaiki & tunggal)
+    // Fungsi untuk menampilkan dokumen (diperbaiki agar Admin bisa akses)
     public function lihatDokumen($id, $field)
     {
         $dokumen = Dokumen::where('pengajuan_id', $id)->firstOrFail();
         $pengajuan = Pengajuan::findOrFail($id);
 
-        // Verifikasi kepemilikan
-        if ($pengajuan->user_id !== Auth::id()) {
+        // IZINKAN jika dia Pemilik Dokumen ATAU jika dia adalah Admin
+        // Kita cek role user yang sedang login
+        if ($pengajuan->user_id !== Auth::id() && auth()->user()->role !== 'admin') {
             abort(403, 'Anda tidak memiliki hak akses.');
         }
 

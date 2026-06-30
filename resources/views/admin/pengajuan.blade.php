@@ -8,12 +8,23 @@
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama / no. pengajuan..." 
                class="flex-1 p-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
         
-        <select name="status" class="p-3 border rounded-lg text-sm outline-none shadow-sm" onchange="this.form.submit()">
-            <option value="">Semua Status</option>
-            <option value="menunggu" {{ request('status') == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
-            <option value="disetujui" {{ request('status') == 'disetujui' ? 'selected' : '' }}>Disetujui</option>
-            <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
-        </select>
+        <div class="relative inline-block">
+            <select name="status" 
+                    class="appearance-none p-3 pl-4 pr-10 border rounded-lg text-sm outline-none shadow-sm bg-white cursor-pointer" 
+                    onchange="this.form.submit()">
+                <option value="">Semua Status</option>
+                <option value="menunggu" {{ request('status') == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                <option value="disetujui" {{ request('status') == 'disetujui' ? 'selected' : '' }}>Disetujui</option>
+                <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+            </select>
+            
+            <!-- Ikon Panah Kustom -->
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </div>
     </form>
 
     <div class="bg-white rounded-xl shadow-sm border overflow-hidden">

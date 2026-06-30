@@ -20,34 +20,29 @@ Route::middleware(['guest'])->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+// Rute Umum yang bisa diakses baik User maupun Admin (untuk lihat dokumen)
 Route::middleware(['auth'])->group(function () {
-    
+    Route::get('/dokumen/lihat/{id}/{field}', [UserController::class, 'lihatDokumen'])->name('user.dokumen.lihat');
+});
+
+// Rute Khusus User
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
-    
     Route::get('/pengajuan', [UserController::class, 'showPengajuan'])->name('user.pengajuan');
     Route::post('/pengajuan/proses', [UserController::class, 'processPengajuan'])->name('user.pengajuan.process');
-    
     Route::get('/pengajuan/upload/{id}', [UserController::class, 'showUpload'])->name('user.upload');
     Route::post('/pengajuan/upload/proses/{id}', [UserController::class, 'processUpload'])->name('user.upload.process');
-
-    Route::get('/dokumen/lihat/{id}/{field}', [UserController::class, 'lihatDokumen'])->name('user.dokumen.lihat');
-
     Route::get('/pengajuan/detail/{id}', [UserController::class, 'detailPengajuan'])->name('user.pengajuan.detail');
-
     Route::get('/status-pengajuan/{id}', [UserController::class, 'statusPengajuan'])->name('user.status');
     Route::get('/riwayat-permohonan', [UserController::class, 'riwayatPengajuan'])->name('user.riwayat');
-    
     Route::get('/dokumen-saya', [UserController::class, 'dashboard'])->name('user.dokumen');
     Route::get('/notifikasi', [UserController::class, 'dashboard'])->name('user.notifikasi');
     Route::get('/panduan', [UserController::class, 'showPanduan'])->name('user.panduan');
     Route::get('/bantuan', [UserController::class, 'dashboard'])->name('user.bantuan');
-
     Route::get('/profil', [UserController::class, 'showProfil'])->name('user.profil');
-    
-    Route::get('/dokumen/lihat/{id}/{field}', [UserController::class, 'lihatDokumen'])->name('user.dokumen.lihat');
-
 });
 
+// Rute Khusus Admin
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/pengajuan', [AdminController::class, 'daftarPengajuan'])->name('admin.pengajuan');

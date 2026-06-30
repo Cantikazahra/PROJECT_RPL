@@ -19,8 +19,18 @@
                     <p class="text-gray-500">Lokasi: <span class="text-gray-900 font-semibold block">{{ $pengajuan->lokasi_tanah }}</span></p>
                     <p class="text-gray-500">Luas Tanah: <span class="text-gray-900 font-semibold block">{{ $pengajuan->luas_tanah }} m²</span></p>
                     <p class="text-gray-500">Tujuan: <span class="text-gray-900 font-semibold block">{{ $pengajuan->tujuan_pembangunan }}</span></p>
+                    @php
+                        $statusColor = [
+                            'menunggu' => 'bg-yellow-100 text-yellow-700',
+                            'disetujui' => 'bg-green-100 text-green-700',
+                            'ditolak' => 'bg-red-100 text-red-700',
+                        ][strtolower($pengajuan->status)] ?? 'bg-gray-100 text-gray-600';
+                    @endphp
+
                     <p class="text-gray-500">Status Saat Ini: 
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-blue-100 text-blue-700 block w-max mt-1">{{ $pengajuan->status }}</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase {{ $statusColor }} block w-max mt-1">
+                            {{ $pengajuan->status }}
+                        </span>
                     </p>
                 </div>
             </div>
