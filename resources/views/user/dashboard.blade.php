@@ -56,7 +56,6 @@
                 <i class="fas fa-chevron-right text-[10px] text-blue-600 mr-1"></i>
             </a>
 
-            {{-- Status Pengajuan Terakhir --}}
             <div class="text-left mb-5">
                 <h3 class="text-xs font-bold text-gray-800 mb-2">Status Pengajuan Terakhir</h3>
                 
@@ -95,7 +94,6 @@
                 @endif
             </div>
 
-            {{-- Ringkasan --}}
             <div class="text-left">
                 <h3 class="text-xs font-bold text-gray-800 mb-2">Ringkasan</h3>
                 <div class="grid grid-cols-3 gap-2.5 text-center text-[10px] font-bold">

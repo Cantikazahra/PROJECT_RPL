@@ -86,7 +86,6 @@ class AuthController extends Controller
     }
 
     public function loginGoogleMock(Request $request) {
-        // Ambil data user pertama yang bertindak sebagai pemohon umum
         $user = User::where('role', 'user')->first();
 
         if ($user) {

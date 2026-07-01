@@ -3,8 +3,8 @@
 @section('title', 'Riwayat Pengajuan - Perizinan Sleman')
 
 @section('content')
-    <!-- Sidebar -->
-    @include('layouts.sidebar')
+
+@include('layouts.sidebar')
 
     <div class="w-full pt-4 flex flex-col flex-grow text-left relative z-10">
         

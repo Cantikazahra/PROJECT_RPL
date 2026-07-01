@@ -25,7 +25,6 @@ Route::middleware(['guest'])->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Rute Umum yang bisa diakses baik User maupun Admin (untuk lihat dokumen)
 Route::middleware(['auth'])->group(function () {
     Route::get('/dokumen/lihat/{id}/{field}', [UserController::class, 'lihatDokumen'])->name('user.dokumen.lihat');
 });

@@ -167,7 +167,7 @@ class UserController extends Controller
     }
 
     public function showEditProfil() {
-        return view('user.edit_profil'); // Pastikan path filenya sesuai
+        return view('user.edit_profil');
     }
 
     public function updateProfil(Request $request) {

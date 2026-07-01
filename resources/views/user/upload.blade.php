@@ -27,7 +27,6 @@
         <form id="uploadForm" action="{{ route('user.upload.process', $pengajuan_id) }}" method="POST" enctype="multipart/form-data" class="flex-grow overflow-y-auto no-scrollbar space-y-4 pb-4 pr-1">
             @csrf
 
-            {{-- Pesan Error --}}
             @if ($errors->any())
                 <div class="bg-red-50 p-2 rounded-xl">
                     @foreach ($errors->all() as $error)
@@ -36,7 +35,6 @@
                 </div>
             @endif
 
-            {{-- Pesan Sukses --}}
             @if(session('success'))
                 <div class="bg-green-50 p-2 rounded-xl text-[9px] text-green-700 font-bold">
                     {{ session('success') }}
