@@ -53,5 +53,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/pengajuan', [AdminController::class, 'daftarPengajuan'])->name('admin.pengajuan');
     Route::get('/detail/{id}', [AdminController::class, 'detail'])->name('admin.detail');
-    Route::post('/update-status/{id}', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
-});
+    Route::any('/update-status/{id}', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
+    });

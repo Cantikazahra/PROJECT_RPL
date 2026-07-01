@@ -19,7 +19,7 @@
         
         <div class="w-full flex-grow flex flex-col">
             <div class="flex justify-between items-center mb-4">
-                <a href="{{ route('user.dashboard') }}" class="w-7 h-7 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition focus:outline-none">
+                <a href="{{ route('user.riwayat') }}" class="w-7 h-7 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition focus:outline-none">
                     <i class="fas fa-chevron-left text-xs"></i>
                 </a>
                 <h2 class="text-sm font-bold text-gray-800 tracking-wide">Detail Pengajuan</h2>
@@ -34,11 +34,11 @@
                         <td class="w-[60%] font-semibold text-gray-800 align-top">{{ $pengajuan->no_pengajuan }}</td>
                     </tr>
                     <tr>
-                        <td class="font-medium text-gray-500 align-top">Tanggal Pengajuan</td>
+                        <td class="font-medium text-gray-500 align-top">Tanggal</td>
                         <td class="font-semibold text-gray-800 align-top">{{ date('d F Y', strtotime($pengajuan->tanggal_pengajuan)) }}</td>
                     </tr>
                     <tr>
-                        <td class="font-medium text-gray-500 align-top">No. Sertifikat/Tanah</td>
+                        <td class="font-medium text-gray-500 align-top">No. Sertifikat</td>
                         <td class="font-semibold text-gray-800 align-top break-words">{{ $pengajuan->nomor_hak_tanah }}</td>
                     </tr>
                     <tr>
@@ -76,12 +76,21 @@
                 </table>
             </div>
 
+            @if(!empty($pengajuan->catatan_petugas))
+                <div class="bg-orange-50 border border-orange-100 rounded-2xl p-3 mb-4"> <h4 class="font-bold text-orange-800 text-[9px] uppercase tracking-wider mb-1 flex items-center">
+                        <i class="fas fa-comment-alt mr-2"></i> Catatan Petugas
+                    </h4>
+                    <div class="text-[11px] text-orange-700 leading-relaxed whitespace-pre-line font-medium">
+                        {!! e($pengajuan->catatan_petugas) !!}
+                    </div>
+                </div>
+            @endif
+
             <div class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs text-left mb-4 flex-grow flex flex-col">
                 <h3 class="text-xs font-bold text-gray-800 mb-2 tracking-wide">Dokumen Persyaratan</h3>
                 
                 <div class="space-y-2 overflow-y-auto no-scrollbar max-h-[190px] pr-0.5">
                     
-                    {{-- Helper function untuk membuat link aman --}}
                     @php
                         function renderLink($pengajuan, $field) {
                             if ($pengajuan->dokumen && $pengajuan->dokumen->$field) {

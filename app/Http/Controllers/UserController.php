@@ -22,7 +22,7 @@ class UserController extends Controller
             'nomor_hak_tanah'    => 'required|string',
             'lokasi_tanah'       => 'required|string',
             'luas_tanah'         => 'required|numeric|min:1',
-            'tahun_pembangunan'  => 'required|integer|min:1900|max:' . (date('Y') + 5),
+            'tahun_pembangunan'  => 'required|integer|min:' . date('Y') . '|max:' . (date('Y') + 2),
             'jenis_bangunan'     => 'required|string',
             'tujuan_pembangunan' => 'required|string',
         ]);
@@ -40,7 +40,7 @@ class UserController extends Controller
             'tahun_pembangunan'  => $request->tahun_pembangunan,
             'jenis_bangunan'     => $request->jenis_bangunan,
             'tujuan_pembangunan' => $request->tujuan_pembangunan,
-            'status'             => 'perlu_perbaikan',
+            'status'             => 'MENUNGGU',
             'tanggal_pengajuan'  => date('Y-m-d')
         ]);
 

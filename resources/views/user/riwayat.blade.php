@@ -8,7 +8,6 @@
 
     <div class="w-full pt-4 flex flex-col flex-grow text-left relative z-10">
         
-        <!-- Header dengan Tombol Menu (Garis 3) -->
         <div class="flex justify-between items-center mb-5">
             <button onclick="toggleSidebar(true)" class="w-8 h-8 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition focus:outline-none">
                 <i class="fas fa-bars text-xs"></i>
@@ -25,16 +24,18 @@
             
             @forelse($daftarPengajuan as $item)
                 @php
-                    $statusConfig = match($item->status) {
-                        'DISETUJUI'       => ['bg' => 'bg-green-50', 'text' => 'text-green-600', 'border' => 'border-green-100'],
-                        'MENUNGGU'        => ['bg' => 'bg-yellow-50', 'text' => 'text-yellow-600', 'border' => 'border-yellow-100'],
-                        'PERLU PERBAIKAN' => ['bg' => 'bg-amber-50', 'text' => 'text-amber-500', 'border' => 'border-amber-100'],
-                        'DITOLAK'         => ['bg' => 'bg-red-50', 'text' => 'text-red-600', 'border' => 'border-red-100'],
+                    $status = strtolower($item->status);
+                    
+                    $statusConfig = match($status) {
+                        'disetujui'       => ['bg' => 'bg-green-50', 'text' => 'text-green-600', 'border' => 'border-green-100'],
+                        'menunggu'        => ['bg' => 'bg-yellow-50', 'text' => 'text-yellow-600', 'border' => 'border-yellow-100'],
+                        'perlu perbaikan' => ['bg' => 'bg-amber-50', 'text' => 'text-amber-500', 'border' => 'border-amber-100'],
+                        'ditolak'         => ['bg' => 'bg-red-50', 'text' => 'text-red-600', 'border' => 'border-red-100'],
                         default           => ['bg' => 'bg-gray-50', 'text' => 'text-gray-600', 'border' => 'border-gray-100'],
                     };
 
                     $statusClass = "{$statusConfig['text']} {$statusConfig['bg']} {$statusConfig['border']}";
-                    $iconClass = "{$statusConfig['text']} {$statusConfig['bg']} {$statusConfig['border']}";
+                    $iconClass   = $statusConfig['text'];
                 @endphp
 
                 <a href="{{ route('user.pengajuan.detail', $item->id) }}" class="border border-gray-300 rounded-2xl p-3.5 bg-white shadow-3xs flex items-center justify-between hover:bg-gray-50/80 transition cursor-pointer block">

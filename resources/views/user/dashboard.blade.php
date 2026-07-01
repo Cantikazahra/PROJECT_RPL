@@ -61,11 +61,12 @@
                 
                 @if(isset($latest) && $latest != null)
                     @php
-                        $statusColor = match($latest->status) {
-                            'DISETUJUI' => 'text-green-600',
-                            'MENUNGGU' => 'text-yellow-600',
-                            'PERLU PERBAIKAN' => 'text-amber-500',
-                            default => 'text-red-600'
+                        $statusColor = match(strtolower($latest->status)) {
+                            'disetujui' => 'text-green-600',
+                            'menunggu' => 'text-yellow-600',
+                            'perlu perbaikan' => 'text-amber-500',
+                            'ditolak' => 'text-red-600', 
+                            default => 'text-gray-600'
                         };
                     @endphp
                     <a href="{{ route('user.status', $latest->id) }}" class="w-full border border-gray-300 rounded-2xl p-4 flex items-center space-x-4 bg-white shadow-xs hover:bg-gray-50 transition block group text-left">

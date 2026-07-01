@@ -28,9 +28,10 @@
 
             @php
                 $statusColor = match($pengajuan->status) {
-                    'DISETUJUI' => 'text-green-600',
-                    'MENUNGGU' => 'text-yellow-600',
-                    'DITOLAK' => 'text-red-600',
+                    'disetujui' => 'text-green-600',
+                    'menunggu' => 'text-yellow-600',
+                    'perlu perbaikan' => 'text-amber-500',
+                    'ditolak' => 'text-red-600', 
                     default => 'text-gray-600'
                 };
             @endphp
@@ -43,22 +44,25 @@
                         <i class="far fa-clock text-2xl"></i>
                     </div>
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status Saat Ini</p>
-                    <!-- Teks status sekarang dinamis warnanya -->
                     <p class="text-sm font-bold {{ $statusColor }} mt-1">{{ $pengajuan->status }}</p>
                 </div>
 
                 <table class="w-full text-[10px] text-gray-700 border-separate border-spacing-y-2">
                     <tr>
-                        <td class="w-[40%] font-medium text-gray-500">Tanggal Pengajuan</td>
-                        <td class="w-[60%] font-semibold text-gray-800">{{ date('d F Y', strtotime($pengajuan->tanggal_pengajuan)) }}</td>
+                        <td class="w-[40%] font-medium text-gray-500 align-top">Tanggal Pengajuan</td>
+                        <td class="w-[60%] font-semibold text-gray-800 align-top">{{ date('d F Y', strtotime($pengajuan->tanggal_pengajuan)) }}</td>
                     </tr>
                     <tr>
-                        <td class="font-medium text-gray-500">No. Pengajuan</td>
-                        <td class="font-semibold text-gray-800">{{ $pengajuan->no_pengajuan }}</td>
+                        <td class="font-medium text-gray-500 align-top">No. Pengajuan</td>
+                        <td class="font-semibold text-gray-800 align-top">{{ $pengajuan->no_pengajuan }}</td>
                     </tr>
                     <tr>
-                        <td class="font-medium text-gray-500">Catatan Petugas</td>
-                        <td class="font-semibold text-gray-800 italic">{{ $pengajuan->catatan ?? '-' }}</td>
+                        <td colspan="2" class="pt-2">
+                            <div class="font-medium text-gray-500 mb-1">Catatan Petugas:</div>
+                            <div class="p-3 bg-gray-50 rounded-lg italic text-black-700 leading-relaxed border border-gray-100">
+                                {{ $pengajuan->catatan_petugas ?? '-' }}
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>

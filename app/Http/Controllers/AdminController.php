@@ -79,19 +79,29 @@ class AdminController extends Controller
     public function updateStatus(Request $request, $id) 
     {
         $request->validate([
-            'status' => 'required|in:menunggu,disetujui,ditolak,perlu_perbaikan',
+            'status' => 'required|in:menunggu,disetujui,ditolak,perlu perbaikan',
+            'catatan' => 'nullable|string',
         ]);
 
         $pengajuan = Pengajuan::findOrFail($id);
+
         $pengajuan->status = $request->status;
+
+        if ($request->filled('catatan')) {
+            $timestamp = now()->format('d/m/Y H:i');
+            $catatanBaru = "[$timestamp] " . $request->catatan . "\n";
+            
+            $pengajuan->catatan_petugas = ($pengajuan->catatan_petugas ?? '') . $catatanBaru;
+        }
+        
         $pengajuan->save();
 
-        return redirect()->back()->with('success', 'Status berhasil diubah.');
+        return redirect()->back()->with('success', 'Status dan catatan berhasil diperbarui.');
     }
 
     public function detail($id)
     {
-        $pengajuan = Pengajuan::with(['user', 'dokumen'])->findOrFail($id);
+        $pengajuan = Pengajuan::findOrFail($id); 
         return view('admin.detail', compact('pengajuan'));
     }
 }

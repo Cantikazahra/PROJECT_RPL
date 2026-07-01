@@ -70,7 +70,6 @@
                 <h3 class="font-bold text-gray-800 mb-4">Catatan Revisi / Verifikasi</h3>
                 <form action="{{ route('admin.updateStatus', $pengajuan->id) }}" method="POST" id="adminForm">
                     @csrf
-                    @method('PATCH')
                     <input type="hidden" name="status" id="status_input">
                     <textarea name="catatan" class="w-full border rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none" rows="3" placeholder="Tulis catatan jika ada revisi...">{{ $pengajuan->catatan_petugas }}</textarea>
                 </form>
@@ -83,7 +82,7 @@
                 <div class="space-y-3">
                     <button onclick="submitAdmin('disetujui')" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition">Disetujui</button>
                     <button onclick="submitAdmin('ditolak')" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl hover:bg-red-700 transition">Tolak</button>
-                    <button onclick="submitAdmin('perlu_perbaikan')" class="w-full bg-orange-500 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition">Perlu Perbaikan</button>
+                    <button onclick="submitAdmin('perlu perbaikan')" class="w-full bg-orange-500 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition">Perlu Perbaikan</button>
                 </div>
             </div>
         </div>
