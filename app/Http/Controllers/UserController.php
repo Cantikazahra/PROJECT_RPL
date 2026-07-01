@@ -11,13 +11,11 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    // Halaman awal untuk mengisi form pengajuan
     public function showPengajuan()
     {
         return view('user.pengajuan');
     }
 
-    // Memproses data awal pengajuan
     public function processPengajuan(Request $request)
     {
         $request->validate([
@@ -42,21 +40,19 @@ class UserController extends Controller
             'tahun_pembangunan'  => $request->tahun_pembangunan,
             'jenis_bangunan'     => $request->jenis_bangunan,
             'tujuan_pembangunan' => $request->tujuan_pembangunan,
-            'status'             => 'PERLU PERBAIKAN',
+            'status'             => 'perlu_perbaikan',
             'tanggal_pengajuan'  => date('Y-m-d')
         ]);
 
         return redirect()->route('user.upload', $pengajuan->id);
     }
 
-    // Halaman untuk upload dokumen
     public function showUpload($id)
     {
         $pengajuan = Pengajuan::with('dokumen')->findOrFail($id);
         return view('user.upload', ['pengajuan_id' => $id, 'pengajuan' => $pengajuan]);
     }
 
-    // Memproses upload dokumen (Cicil Upload)
     public function processUpload(Request $request, $id)
     {
         $request->validate([
@@ -89,12 +85,11 @@ class UserController extends Controller
 
             $dokumen->save();
 
-            // Cek kelengkapan dokumen untuk update status
             $wajib = ['file_ktp', 'file_sertifikat', 'file_spt_pbb', 'file_pernyataan_3in1', 'file_gambar_bangunan'];
             $lengkap = true;
             foreach($wajib as $w) { if(empty($dokumen->$w)) $lengkap = false; }
             
-            Pengajuan::where('id', $id)->update(['status' => $lengkap ? 'MENUNGGU' : 'PERLU PERBAIKAN']);
+            Pengajuan::where('id', $id)->update(['status' => $lengkap ? 'menunggu' : 'perlu_perbaikan']);
 
             DB::commit();
             return redirect()->back()->with('success', 'Dokumen berhasil disimpan sementara.');
@@ -104,14 +99,11 @@ class UserController extends Controller
         }
     }
 
-    // Fungsi untuk menampilkan dokumen (diperbaiki agar Admin bisa akses)
     public function lihatDokumen($id, $field)
     {
         $dokumen = Dokumen::where('pengajuan_id', $id)->firstOrFail();
         $pengajuan = Pengajuan::findOrFail($id);
 
-        // IZINKAN jika dia Pemilik Dokumen ATAU jika dia adalah Admin
-        // Kita cek role user yang sedang login
         if ($pengajuan->user_id !== Auth::id() && auth()->user()->role !== 'admin') {
             abort(403, 'Anda tidak memiliki hak akses.');
         }
@@ -124,7 +116,6 @@ class UserController extends Controller
         return Storage::disk('public')->response($path);
     }
 
-    // Menampilkan detail pengajuan
     public function detailPengajuan($id)
     {
         $pengajuan = Pengajuan::with('dokumen')->findOrFail($id);
@@ -134,10 +125,8 @@ class UserController extends Controller
         return view('user.detail', compact('pengajuan'));
     }
 
-    // Status pengajuan terkini
     public function statusPengajuan($id = null)
     {
-        // Jika $id tidak ada, ambil pengajuan terbaru
         if ($id) {
             $pengajuan = \App\Models\Pengajuan::findOrFail($id);
         } else {
@@ -146,17 +135,15 @@ class UserController extends Controller
                         ->first();
         }
 
-        // Pastikan variabel 'pengajuan' dikirim dengan menggunakan compact('pengajuan')
         return view('user.status', compact('pengajuan'));
     }
 
     public function showPanduan()
     {
-        $faqs = \App\Models\Faq::all(); // Ambil data FAQ dari database
+        $faqs = \App\Models\Faq::all();
         return view('user.panduan', compact('faqs'));
     }
 
-    // Riwayat pengajuan
     public function riwayatPengajuan(Request $request)
     {
         $userId = auth()->id();
@@ -175,8 +162,32 @@ class UserController extends Controller
 
     public function showProfil()
     {
-        // Mengambil data user yang sedang login
         $user = auth()->user();
         return view('user.profil', compact('user'));
+    }
+
+    public function showEditProfil() {
+        return view('user.edit_profil'); // Pastikan path filenya sesuai
+    }
+
+    public function updateProfil(Request $request) {
+        $user = auth()->user();
+        
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        $user->nama = $request->nama;
+        $user->alamat = $request->alamat;
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('user.profil')->with('success', 'Profil berhasil diupdate!');
     }
 }

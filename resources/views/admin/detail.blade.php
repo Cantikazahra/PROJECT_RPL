@@ -19,17 +19,20 @@
                     <p class="text-gray-500">Lokasi: <span class="text-gray-900 font-semibold block">{{ $pengajuan->lokasi_tanah }}</span></p>
                     <p class="text-gray-500">Luas Tanah: <span class="text-gray-900 font-semibold block">{{ $pengajuan->luas_tanah }} m²</span></p>
                     <p class="text-gray-500">Tujuan: <span class="text-gray-900 font-semibold block">{{ $pengajuan->tujuan_pembangunan }}</span></p>
+                    
                     @php
+                        // Standardisasi warna status menggunakan snake_case
                         $statusColor = [
-                            'menunggu' => 'bg-yellow-100 text-yellow-700',
-                            'disetujui' => 'bg-green-100 text-green-700',
-                            'ditolak' => 'bg-red-100 text-red-700',
+                            'menunggu'        => 'bg-yellow-100 text-yellow-700',
+                            'disetujui'       => 'bg-green-100 text-green-700',
+                            'ditolak'         => 'bg-red-100 text-red-700',
+                            'perlu_perbaikan' => 'bg-orange-100 text-orange-700',
                         ][strtolower($pengajuan->status)] ?? 'bg-gray-100 text-gray-600';
                     @endphp
 
                     <p class="text-gray-500">Status Saat Ini: 
                         <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase {{ $statusColor }} block w-max mt-1">
-                            {{ $pengajuan->status }}
+                            {{ str_replace('_', ' ', $pengajuan->status) }}
                         </span>
                     </p>
                 </div>
@@ -51,17 +54,10 @@
 
                     @foreach($dokumenList as $label => $key)
                     <div class="flex justify-between items-center py-3 border-b border-gray-50 last:border-0">
-                        <div class="flex items-center gap-3">
-                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            <span class="text-sm text-gray-700">{{ $label }}</span>
-                        </div>
+                        <span class="text-sm text-gray-700">{{ $label }}</span>
                         @if(isset($pengajuan->dokumen->$key))
                             <a href="{{ route('user.dokumen.lihat', [$pengajuan->id, $key]) }}" target="_blank" 
-                               class="bg-gray-100 px-4 py-1.5 rounded-lg text-[10px] font-bold text-gray-600 hover:bg-gray-200 transition uppercase">
-                                Lihat
-                            </a>
+                               class="bg-gray-100 px-4 py-1.5 rounded-lg text-[10px] font-bold text-gray-600 hover:bg-gray-200 transition uppercase">Lihat</a>
                         @else
                             <span class="text-[10px] text-gray-400 italic">Belum diunggah</span>
                         @endif
@@ -74,6 +70,7 @@
                 <h3 class="font-bold text-gray-800 mb-4">Catatan Revisi / Verifikasi</h3>
                 <form action="{{ route('admin.updateStatus', $pengajuan->id) }}" method="POST" id="adminForm">
                     @csrf
+                    @method('PATCH')
                     <input type="hidden" name="status" id="status_input">
                     <textarea name="catatan" class="w-full border rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none" rows="3" placeholder="Tulis catatan jika ada revisi...">{{ $pengajuan->catatan_petugas }}</textarea>
                 </form>
@@ -86,7 +83,7 @@
                 <div class="space-y-3">
                     <button onclick="submitAdmin('disetujui')" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition">Disetujui</button>
                     <button onclick="submitAdmin('ditolak')" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl hover:bg-red-700 transition">Tolak</button>
-                    <button onclick="submitAdmin('menunggu')" class="w-full bg-yellow-500 text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition">Perlu Perbaikan</button>
+                    <button onclick="submitAdmin('perlu_perbaikan')" class="w-full bg-orange-500 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition">Perlu Perbaikan</button>
                 </div>
             </div>
         </div>

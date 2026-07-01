@@ -11,8 +11,13 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::middleware(['guest'])->group(function () {
+
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login/proses', [AuthController::class, 'loginProcess'])->name('login.process');
+    
+    Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
+    Route::post('/admin/login/proses', [AdminController::class, 'loginProcess'])->name('admin.login.process');
+    
     Route::get('/auth/google/redirect', [AuthController::class, 'loginGoogleMock'])->name('login.google.mock');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register/proses', [AuthController::class, 'registerProcess'])->name('register.process');
@@ -40,6 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/panduan', [UserController::class, 'showPanduan'])->name('user.panduan');
     Route::get('/bantuan', [UserController::class, 'dashboard'])->name('user.bantuan');
     Route::get('/profil', [UserController::class, 'showProfil'])->name('user.profil');
+    Route::get('/profil/edit', [UserController::class, 'showEditProfil'])->name('user.profil.edit');
+    Route::post('/profil/update', [UserController::class, 'updateProfil'])->name('user.profil.update');
 });
 
 // Rute Khusus Admin

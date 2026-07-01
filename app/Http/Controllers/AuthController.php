@@ -17,17 +17,13 @@ class AuthController extends Controller
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
-        ], [
-            'email.required'    => 'Email wajib diisi.',
-            'email.email'       => 'Format email tidak valid.',
-            'password.required' => 'Password wajib diisi.',
         ]);
 
-        $userCek = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-        if (!$userCek) {
+        if (!$user) {
             return back()->withErrors([
-                'email' => 'Email belum terdaftar. Silakan melakukan registrasi terlebih dahulu!',
+                'email' => 'Email belum terdaftar.',
             ])->withInput($request->only('email'));
         }
 
@@ -37,7 +33,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             if (Auth::user()->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+                Auth::logout(); 
+                return back()->withErrors([
+                    'email' => 'Halaman ini khusus untuk pemohon. Admin silakan login di halaman admin.',
+                ]);
             }
 
             return redirect()->route('user.dashboard');

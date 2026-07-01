@@ -4,9 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
 
 class AdminController extends Controller
 {
+    public function showLogin()
+    {
+        return view('admin.login');
+    }
+
+    public function loginProcess(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => 'Email atau password salah.']);
+        }
+
+        if ($user->role !== 'admin') {
+            return back()->withErrors([
+                'role_error' => 'Halaman ini khusus untuk admin. Pemohon silakan login di halaman pemohon.',
+            ])->withInput($request->only('email'));
+        }
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 'admin'])) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
+        }
+
+        return back()->withErrors(['email' => 'Email atau password salah.']);
+    }
+
     public function index()
     {
         $data = [
@@ -14,7 +47,6 @@ class AdminController extends Controller
             'menunggu' => Pengajuan::where('status', 'menunggu')->count(),
             'disetujui' => Pengajuan::where('status', 'disetujui')->count(),
             'ditolak' => Pengajuan::where('status', 'ditolak')->count(),
-            // Menggunakan with('user') untuk performa yang lebih baik
             'pengajuanTerbaru' => Pengajuan::with('user')->latest()->take(5)->get()
         ];
 
@@ -23,15 +55,12 @@ class AdminController extends Controller
 
     public function daftarPengajuan(Request $request)
     {
-        // 1. Tambahkan ->with('user') di sini agar nama pemohon tampil
         $query = Pengajuan::with('user');
 
-        // Filter Status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Pencarian: bisa cari berdasarkan no_pengajuan ATAU nama pemohon
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -47,25 +76,22 @@ class AdminController extends Controller
         return view('admin.pengajuan', compact('pengajuans'));
     }
 
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, $id) 
     {
         $request->validate([
-            'status' => 'required|in:menunggu,disetujui,ditolak',
+            'status' => 'required|in:menunggu,disetujui,ditolak,perlu_perbaikan',
         ]);
 
         $pengajuan = Pengajuan::findOrFail($id);
-        $pengajuan->update([
-            'status' => $request->status,
-            'catatan_petugas' => $request->catatan,
-        ]);
+        $pengajuan->status = $request->status;
+        $pengajuan->save();
 
-        return back()->with('success', 'Status pengajuan berhasil diupdate.');
+        return redirect()->back()->with('success', 'Status berhasil diubah.');
     }
 
     public function detail($id)
     {
-        // Mengambil data pengajuan beserta user dan dokumennya
-        $pengajuan = \App\Models\Pengajuan::with(['user', 'dokumen'])->findOrFail($id);
+        $pengajuan = Pengajuan::with(['user', 'dokumen'])->findOrFail($id);
         return view('admin.detail', compact('pengajuan'));
     }
 }

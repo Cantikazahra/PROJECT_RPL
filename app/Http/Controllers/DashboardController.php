@@ -10,14 +10,15 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         $userId = Auth::id();
-
-        // Ambil hitungan ringkasan data statistik
         $total = Pengajuan::where('user_id', $userId)->count();
-        $menunggu = Pengajuan::where('user_id', $userId)->where('status', 'MENUNGGU')->count();
-        $disetujui = Pengajuan::where('user_id', $userId)->where('status', 'DISETUJUI')->count();
+        $menunggu = Pengajuan::where('user_id', $userId)->where('status', 'menunggu')->count();
+        $disetujui = Pengajuan::where('user_id', $userId)->where('status', 'disetujui')->count();
 
-        // Ambil data pengajuan paling terbaru
         $latest = Pengajuan::where('user_id', $userId)->latest()->first();
 
         return view('user.dashboard', compact('total', 'menunggu', 'disetujui', 'latest'));

@@ -12,24 +12,22 @@
     <aside x-show="sidebarOpen" class="w-64 bg-blue-900 text-white p-6 flex-shrink-0">
         <div class="mb-10 text-center">
             <img src="{{ asset('images/sleman.png') }}" class="w-16 mx-auto mb-2"> 
-            <h1 class="text-sm font-bold">Sistem Perizinan<br>Mendirikan Bangunan</h1>
+            <h1 class="text-sm font-bold">SIM - IMB<br>Sistem Informasi Manajemen Izin Mendirikan Bangunan</h1>
+            <p>Kabupaten Sleman</p>
             <span class="text-[10px] bg-blue-700 px-2 py-1 rounded mt-2 inline-block">ADMIN</span>
         </div>
         
         <nav class="space-y-2">
-            <!-- Menu Dashboard -->
             <a href="{{ route('admin.dashboard') }}" 
                class="block p-3 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard*') ? 'bg-blue-800 font-semibold' : 'hover:bg-blue-800' }}">
                Dashboard
             </a>
 
-            <!-- Menu Pengajuan -->
             <a href="{{ route('admin.pengajuan') }}" 
                class="block p-3 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pengajuan*', 'admin.detail*') ? 'bg-blue-800 font-semibold' : 'hover:bg-blue-800' }}">
                Pengajuan
             </a>
 
-            <!-- Menu Logout -->
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="w-full text-left p-3 rounded-lg text-sm text-red-300 hover:bg-blue-800 hover:text-white transition-all">
